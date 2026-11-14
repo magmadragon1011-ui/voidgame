@@ -12,7 +12,15 @@ const LINKS = [
   {id:"scratchapp",name:"Scratch Editor",category:"Apps",icon:"🧩",description:"Build interactive stories, games, and animations.",url:"https://scratch.mit.edu/projects/editor/"},
   {id:"discord",name:"Discord",category:"Apps",icon:"💬",description:"Communicate and organize communities.",url:"https://discord.com/app"},
   {id:"canva",name:"Canva",category:"Apps",icon:"🖌️",description:"Create presentations, posters, and designs.",url:"https://www.canva.com/"},
-  {id:"notion",name:"Notion",category:"Apps",icon:"🗒️",description:"Keep notes, tasks, and projects organized.",url:"https://www.notion.so/"}
+  {id:"notion",name:"Notion",category:"Apps",icon:"🗒️",description:"Keep notes, tasks, and projects organized.",url:"https://www.notion.so/"},
+  {
+  id: "2048",
+  name: "2048",
+  category: "Games",
+  icon: "🔢",
+  description: "A fun number puzzle game.",
+  url: "https://play2048.co/"
+}
 ];
 
 const grid = document.querySelector("#cardGrid");
