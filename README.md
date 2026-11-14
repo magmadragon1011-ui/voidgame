@@ -1,77 +1,39 @@
-# VOID HUB — Amazon S3 static website
+# VOID HUB — Native + embedded games
 
-A responsive, dark-themed link hub with Games, Web tools, Apps, search, and browser-local Favorites.
+This replacement adds an in-site player with:
+- **Native games:** static HTML/CSS/JS game files stored in this repository.
+- **Embedded games:** provider-approved iframe URLs. Some sites prohibit iframe embedding; use their official embed URL and follow their terms.
+- **External links:** ordinary links to game and app websites.
+- Search, categories, browser-local favorites, and fullscreen player controls.
 
-## Files
+## Included example
+`games/star-catcher/index.html` is an original mini-game hosted directly in this repository. It demonstrates the native game format.
 
-- `index.html` — page structure
-- `styles.css` — layout and styling
-- `app.js` — link directory, search, category filters, favorites, and settings
+## Update your existing GitHub Pages site
+1. Extract this ZIP.
+2. Open your existing `void-hub` GitHub repository.
+3. Upload/replace `index.html`, `styles.css`, and `app.js` in the repository root.
+4. Upload the entire `games` folder, preserving `games/star-catcher/index.html`.
+5. Commit changes to `main`. Wait for Pages to deploy, then refresh the site (try Ctrl+Shift+R).
+6. Keep Settings → Pages configured for `main` and `/(root)`.
 
-## Preview locally
-
-You can open `index.html` directly in a browser. For a more realistic local preview, run a static server from this folder:
-
-```bash
-python -m http.server 8000
-```
-
-Then visit `http://localhost:8000`.
-
-## Deploy to Amazon S3
-
-1. Sign in to the AWS Console and open **S3**.
-2. Create a bucket with a globally unique name, such as `my-void-hub-12345`.
-3. Choose the AWS Region you want. Keep the bucket name; it becomes part of the website endpoint.
-4. For the simplest S3 website-endpoint setup, turn off **Block all public access** for this bucket only. Acknowledge the warning. Do not do this to a bucket containing private files.
-5. Open the bucket's **Permissions** tab and add this bucket policy, replacing `YOUR_BUCKET_NAME`:
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "PublicReadForWebsiteFiles",
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*"
-    }
-  ]
-}
-```
-
-6. Open **Properties** → **Static website hosting** → **Edit**.
-7. Choose **Enable**, choose **Host a static website**, set the index document to `index.html`, and save.
-8. Open the **Objects** tab and upload `index.html`, `styles.css`, and `app.js` (upload the files themselves, not the ZIP).
-9. Return to **Properties** → **Static website hosting** and open the **Bucket website endpoint**.
-
-### Important hosting notes
-
-- The S3 website endpoint is HTTP, not HTTPS. For HTTPS and a custom domain, put Amazon CloudFront in front of the bucket and use an Origin Access Control/private bucket setup. Follow AWS's current CloudFront + S3 documentation rather than making the bucket public.
-- S3 website hosting is public hosting. Anyone with the endpoint can view the files. Never upload passwords, private data, API keys, or anything confidential.
-- AWS may charge for storage, requests, data transfer, and CloudFront. Check current AWS pricing and set a budget alert.
-- If you are using an AWS account managed by a school or organization, ask its administrator before changing public-access settings.
-
-## Customize your links
-
-Open `app.js` and edit the `LINKS` array near the top. Each item uses this shape:
-
+## Add a native game
+1. Create `games/my-game/` in the repo.
+2. Put a browser-ready game build in that folder. It needs an `index.html` entry point plus all supporting JS, CSS, images, audio, and assets.
+3. Add this object inside the `LINKS` array in `app.js`:
 ```js
-{
-  id: "unique-id",
-  name: "Example",
-  category: "Games", // Games, Web tools, or Apps
-  icon: "🎮",
-  description: "A short description.",
-  url: "https://example.com/"
-}
+{id:"my-game",name:"My Game",category:"Games",icon:"🎮",description:"A short description.",type:"native",src:"games/my-game/index.html"},
 ```
+4. Commit the new folder and app.js change.
 
-Use a unique `id` for each item. Favorites are stored in the visitor's browser using localStorage, so they do not sync across devices.
+Only upload game files you created, have permission to redistribute, or whose license allows hosting.
+
+## Add an embedded game
+Add an object to `LINKS`:
+```js
+{id:"game-id",name:"Game Name",category:"Games",icon:"🕹️",description:"Short description.",type:"embed",src:"https://provider.example/official-embed-url"},
+```
+Use the provider's official embed URL. If it refuses to load, the provider may prohibit iframe embedding. Don't attempt to bypass those restrictions; use its official site link instead.
 
 ## Notes
-
-- The included links are examples; check each site's terms and your network rules before using them.
-- This is a link directory, not a proxy. It does not relay traffic or bypass network restrictions.
-- The Google Fonts import is optional. The site still works if that external font service is unavailable.
+GitHub Pages is static hosting: browser HTML/CSS/JS games work, but server-based games and executable desktop games do not. This setup does not bypass school/work network restrictions. Favorites are saved separately in each visitor's browser.
